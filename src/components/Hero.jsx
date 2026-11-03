@@ -367,11 +367,17 @@ export default function Hero() {
                       {/* Ambient Halo behind character */}
                       <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-violet-500/15 via-cyan-400/10 to-indigo-500/20 blur-2xl pointer-events-none" />
 
-                      {/* Main Character Image */}
+                      {/* Main Character Image - Adaptive for Light / Dark */}
+                      <img
+                        src="/img/character-light.png"
+                        alt="Nexova End-to-End App Partner"
+                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl block dark:hidden"
+                        loading="eager"
+                      />
                       <img
                         src="/img/character.png"
                         alt="Nexova End-to-End App Partner"
-                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl"
+                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl hidden dark:block"
                         loading="eager"
                       />
 
