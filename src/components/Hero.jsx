@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Play, ChevronRight, Sparkles, Terminal, Bot } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const stages = [
   { label: 'IDEA',         short: 'IDEA',  img: '/img/ICONS/icons8-idea-120.png',        color: '#6366f1' },
@@ -32,6 +33,8 @@ const lifecyclePills = [
 ];
 
 export default function Hero() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const [activeStage, setActiveStage] = useState(0);
@@ -162,31 +165,42 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden pt-20 sm:pt-28 md:pt-32 pb-16 sm:pb-24">
-      {/* Sky background image — light mode only */}
-      <div
-        className="absolute inset-0 dark:hidden"
-        style={{
-          backgroundImage: 'url(/img/9b8f0091-c3b3-48cf-9906-7b97e319e215.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center top',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
-      {/* Soft white overlay for readability (light mode) */}
-      <div className="absolute inset-0 dark:hidden bg-gradient-to-b from-white/70 via-white/85 to-white" />
-      <div className="absolute bottom-0 left-0 right-0 h-40 dark:hidden bg-gradient-to-t from-white to-transparent" />
+    <section id="hero" className="relative min-h-screen flex flex-col justify-start lg:justify-center overflow-hidden pt-20 sm:pt-28 md:pt-32 pb-16 sm:pb-24 bg-white dark:bg-[#07080f] transition-colors duration-300">
+      {/* Light mode background */}
+      {!isDark && (
+        <>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'url(/img/9b8f0091-c3b3-48cf-9906-7b97e319e215.png)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+              backgroundRepeat: 'no-repeat',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/85 to-white" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
+        </>
+      )}
 
       {/* Dark mode background effects */}
-      <div className="absolute inset-0 hidden dark:block bg-grid opacity-100" />
-      <div className="absolute inset-0 hidden dark:block bg-hero-gradient" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-violet-600/10 rounded-full blur-[100px] pointer-events-none hidden dark:block" />
-
-      {/* Particle canvas — pointer-events-none so mobile scrolling works cleanly */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none hidden dark:block"
-      />
+      {isDark && (
+        <>
+          <div className="absolute inset-0 bg-grid opacity-100 pointer-events-none" />
+          <div className="absolute inset-0 bg-hero-gradient pointer-events-none" />
+          {/* Hardware-safe radial glow (avoids Firefox Linux WebRender blur artifact) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle 500px at 50% 20%, rgba(124, 58, 237, 0.12), transparent 70%)',
+            }}
+          />
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+          />
+        </>
+      )}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -369,15 +383,9 @@ export default function Hero() {
 
                       {/* Main Character Image - Adaptive for Light / Dark */}
                       <img
-                        src="/img/character-light.png"
+                        src={isDark ? '/img/character.png' : '/img/character-light.png'}
                         alt="Nexova End-to-End App Partner"
-                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl block dark:hidden"
-                        loading="eager"
-                      />
-                      <img
-                        src="/img/character.png"
-                        alt="Nexova End-to-End App Partner"
-                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl hidden dark:block"
+                        className="relative z-10 w-full h-full object-contain animate-character-float drop-shadow-xl"
                         loading="eager"
                       />
 
